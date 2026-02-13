@@ -4,15 +4,16 @@ import java.time.LocalDate;
 
 public abstract class Cuenta {
     protected String numCuenta, titular;
-    protected LocalDate fechaApertura;
+    protected String fechaApertura;
     protected double saldoActual;
     protected EstadoCuenta estado;
 
     public Cuenta(String numCuenta, String titular, String fechaApertura, double saldoActual) {
         this.numCuenta = numCuenta;
         this.titular = titular;
-        this.fechaApertura = LocalDate.parse(fechaApertura);
+        this.fechaApertura =  fechaApertura;
         this.saldoActual = saldoActual;
+        this.estado =  EstadoCuenta.ACTIVA;
     }
 
     // -------------------------------------------------- GETTERS Y SETTERS -----------------------------------------------
@@ -39,7 +40,7 @@ public abstract class Cuenta {
     }
 
     public void setFechaApertura(String fechaApertura) {
-        this.fechaApertura = LocalDate.parse(fechaApertura);
+        this.fechaApertura = fechaApertura;
     }
 
     public double getSaldoActual() {

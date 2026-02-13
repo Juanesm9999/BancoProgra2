@@ -5,11 +5,23 @@ import java.time.LocalDate;
 
 
 public class Main {
-
-    public static void main(String[] args) {
+    
+    public static void main(String[] args) throws Cuenta.MontoInvalidoException, Cuenta.CuentaInactivaException, Cuenta.SaldoInsuficienteException, Cuenta.LimiteSobregiroExcedidoException, Cuenta.SaldoMinimoException {
 
         Scanner sc = new Scanner(System.in);
         Banco banco = new Banco("Banco UniQuindío", "123456789");
+
+        Ahorro ahorro1 = new Ahorro("1000000001", "María López", "2024-01-10", 500000);
+        Corriente corriente1 = new Corriente("1000000002", "Juan Pérez", "2024-02-15", 50000);
+        Nomina nomina1 = new Nomina("1000000003", "Pedro Gómez", "2024-03-01", 100000);
+
+
+        banco.agregarCuenta(ahorro1);
+        banco.agregarCuenta(corriente1);
+        banco.agregarCuenta(nomina1);
+
+        System.out.println("Cuentas creadas correctamente.");
+
 
         int opcion;
 
@@ -38,12 +50,12 @@ public class Main {
                     String titular = sc.nextLine();
 
                     System.out.print("Fecha apertura: ");
-                    String fecha = sc.nextLine();
+                    String fechaApertura = sc.nextLine();
 
                     System.out.print("Saldo inicial: ");
                     double saldo = sc.nextDouble();
 
-                    Ahorro ahorro = new Ahorro(num, titular, fecha, saldo);
+                    Ahorro ahorro = new Ahorro(num, titular, fechaApertura, saldo);
                     banco.agregarCuenta(ahorro);
 
                     System.out.println("Cuenta Ahorro creada.");
@@ -76,12 +88,12 @@ public class Main {
                     String titular = sc.nextLine();
 
                     System.out.print("Fecha apertura: ");
-                    String fecha = sc.nextLine();
+                    String fechaApertura = sc.nextLine();
 
                     System.out.print("Saldo inicial: ");
                     double saldo = sc.nextDouble();
 
-                    Nomina nomina = new Nomina(num, titular, fecha, saldo);
+                    Nomina nomina = new Nomina(num, titular, fechaApertura, saldo);
                     banco.agregarCuenta(nomina);
 
                     System.out.println("Cuenta Nómina creada.");

@@ -1,5 +1,7 @@
 package co.edu.uniquindio.poo;
 
+import java.time.LocalDate;
+
 public class Ahorro extends Cuenta {
     private double SALDO_MINIMO =  100000;
     private double TASA_INTERES_ANUAL = 0.036;
