@@ -2,15 +2,15 @@ package co.edu.uniquindio.poo;
 
 public class Ahorro extends Cuenta {
     private double SALDO_MINIMO =  100000;
-    private double TAZAS_INTERES_ANUAL = 0.036;
+    private double TASA_INTERES_ANUAL = 0.036;
 
-    public  Ahorro(String numCuenta, String titular, String fechaApertura, double saldoActual, double SALDO_MINIMO, double TAZAS_INTERES_ANUAL) {
+    public  Ahorro(String numCuenta, String titular, String fechaApertura, double saldoActual) {
         super(numCuenta, titular, fechaApertura, saldoActual);
         this.SALDO_MINIMO = SALDO_MINIMO;
-        this.TAZAS_INTERES_ANUAL = TAZAS_INTERES_ANUAL;
+        this.TASA_INTERES_ANUAL = TASA_INTERES_ANUAL;
     }
 
-    // ---------------------------- GETTERS YU SETTERS ------------------------------------
+    // ---------------------------- GETTERS Y SETTERS ------------------------------------
 
     public double getSALDO_MINIMO() {
         return SALDO_MINIMO;
@@ -21,18 +21,18 @@ public class Ahorro extends Cuenta {
     }
 
     public double getTAZAS_INTERES_ANUAL() {
-        return TAZAS_INTERES_ANUAL;
+        return TASA_INTERES_ANUAL;
     }
 
     public void setTAZAS_INTERES_ANUAL(double TAZAS_INTERES_ANUAL) {
-        this.TAZAS_INTERES_ANUAL = TAZAS_INTERES_ANUAL;
+        this.TASA_INTERES_ANUAL = TAZAS_INTERES_ANUAL;
     }
 
     @Override
     public String toString() {
         return "Ahorro{" +
                 "Saldo Mínimo =" + SALDO_MINIMO +
-                ", Tazas de interés anual =" + TAZAS_INTERES_ANUAL +
+                ", Tazas de interés anual =" + TASA_INTERES_ANUAL +
                 ", Número de cuenta ='" + numCuenta + '\'' +
                 ", Titular ='" + titular + '\'' +
                 ", Fecha de Apertura ='" + fechaApertura + '\'' +
@@ -42,17 +42,47 @@ public class Ahorro extends Cuenta {
 
     // --------------------------------------- MÉTODOS -----------------------------------------
 
-    public double calcularComisionMensual (){
-        return SALDO_MINIMO + TAZAS_INTERES_ANUAL;
+    @Override
+    public void retirar(double cantidad) {
+
+        if (estado != EstadoCuenta.ACTIVA) {
+            System.out.println("La cuenta no está activa.");
+            return;
+        }
+
+        if (cantidad <= 0) {
+            System.out.println("Cantidad inválida.");
+            return;
+        }
+
+        if ((saldoActual - cantidad) < SALDO_MINIMO) {
+            System.out.println("No se puede retirar. Se viola el saldo mínimo.");
+        } else {
+            saldoActual -= cantidad;
+            System.out.println("Retiro exitoso.");
+        }
     }
 
-    public double calcularInteresesMensuales (){
-        return SALDO_MINIMO - TAZAS_INTERES_ANUAL;
+
+
+    public double calcularComisionMensual() {
+        return 0; // La cuenta de ahorros no cobra comisión mensual
     }
 
-    public void aplicarInteres (){
-
+    public double calcularInteresesMensuales() {
+        return saldoActual * (TASA_INTERES_ANUAL / 12);
     }
+
+
+    public void aplicarInteres() {
+
+        if (estado == EstadoCuenta.ACTIVA) {
+            double interes = calcularInteresesMensuales();
+            saldoActual += interes;
+            System.out.println("Interés aplicado: " + interes);
+        }
+    }
+
 
     @Override
     public String mostrarInfo (){

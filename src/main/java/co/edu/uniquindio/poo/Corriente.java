@@ -6,7 +6,7 @@ public class Corriente extends Cuenta {
     private double COMISION_MENSUAL_FIJA = 15000;
     private double TASA_INTERES_SOBREGIRO = 0.02;
 
-    public Corriente(String numCuenta, String titular, String fechaApertura, double saldoActual, double LIMITE_SOBREGIRO, double COMISION_MENSUAL_FIJA, double TASA_INTERES_SOBREGIRO) {
+    public Corriente(String numCuenta, String titular, String fechaApertura, double saldoActual) {
         super(numCuenta, titular, fechaApertura, saldoActual);
         this.LIMITE_SOBREGIRO = LIMITE_SOBREGIRO;
         this.COMISION_MENSUAL_FIJA = COMISION_MENSUAL_FIJA;
@@ -57,21 +57,68 @@ public class Corriente extends Cuenta {
 
     //------------------------------------- MÉTODOS -------------------------------------------
 
-    public double calcularComisionMensual() {
-        return 0 ;
+    @Override
+    public void retirar(double cantidad) {
+
+        if (estado != EstadoCuenta.ACTIVA) {
+            System.out.println("La cuenta no está activa.");
+            return;
+        }
+
+        if (cantidad <= 0) {
+            System.out.println("Cantidad inválida.");
+            return;
+        }
+
+        double nuevoSaldo = saldoActual - cantidad;
+
+        if (nuevoSaldo < -LIMITE_SOBREGIRO) {
+            System.out.println("Se supera el límite de sobregiro.");
+        } else {
+            saldoActual = nuevoSaldo;
+            System.out.println("Retiro exitoso.");
+        }
     }
+
+
+    public double calcularComisionMensual() {
+        return COMISION_MENSUAL_FIJA;
+    }
+
 
     public boolean estEnSobregiro(){
-        return false;
-    }
+        return saldoActual < 0;
+}
 
-    public double calcularInteresesMensuales (){
+    public double calcularInteresesMensuales() {
+
+        if (estEnSobregiro()) {
+            return Math.abs(saldoActual) * TASA_INTERES_SOBREGIRO;
+        }
+
         return 0;
     }
 
-    public void aplicarComisionMensual(){
+    public void aplicarComisionMensual() {
 
+        if (estado != EstadoCuenta.ACTIVA) {
+            System.out.println("Cuenta no activa.");
+            return;
+        }
+
+      //cobra una comision fija del saldo
+        saldoActual -= COMISION_MENSUAL_FIJA;
+
+     //
+        if (estEnSobregiro()) {
+            double interes = calcularInteresesMensuales();
+            saldoActual -= interes;
+            System.out.println("Interés por sobregiro aplicado: " + interes);
+        }
+
+        System.out.println("Comisión mensual aplicada.");
     }
+
 
     @Override
     public String mostrarInfo() {
